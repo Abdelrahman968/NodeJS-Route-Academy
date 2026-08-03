@@ -6,6 +6,8 @@ const fs = require("fs");
 const path = require("path");
 const os = require("os");
 const EventEmitter = require("events");
+const { pipeline } = require("stream");
+const zlib = require("zlib");
 
 // Log the current file path and directory
 
@@ -167,6 +169,65 @@ function getPlatformAndArch() {
   return result;
 }
 
+// Read a file in chunks and log each chunk
+
+function readFileInChunks(filePath) {
+  const readStream = fs.createReadStream(filePath, {
+    encoding: "utf-8",
+    highWaterMark: 64,
+  });
+
+  readStream.on("data", (chunk) => {
+    console.log(chunk);
+  });
+
+  readStream.on("end", () => {
+    console.log("Finished reading file.");
+  });
+
+  readStream.on("error", (err) => {
+    console.error(`Error: ${err.message}`);
+  });
+}
+
+// Copy a file using streams
+
+function copyFileUsingStreams(sourcePath, destPath) {
+  const readStream = fs.createReadStream(sourcePath);
+  const writeStream = fs.createWriteStream(destPath);
+
+  readStream.pipe(writeStream);
+
+  writeStream.on("finish", () => {
+    console.log("File copied using streams");
+  });
+
+  readStream.on("error", (err) => {
+    console.error(`Read Error: ${err.message}`);
+  });
+
+  writeStream.on("error", (err) => {
+    console.error(`Write Error: ${err.message}`);
+  });
+}
+
+// Compress a file using pipeline
+
+function compressFile(sourcePath, destPath) {
+  const readStream = fs.createReadStream(sourcePath);
+  const writeStream = fs.createWriteStream(destPath);
+  const gzip = zlib.createGzip();
+
+  pipeline(readStream, gzip, writeStream, (err) => {
+    if (err) {
+      console.error(`Pipeline Error: ${err.message}`);
+      return;
+    }
+
+    console.log("File compressed successfully.");
+  });
+}
+
 // logCurrentPathAndDir();
 // getFileName("/user/files/report.pdf");
 // buildPath({ dir: "/folder", name: "app", ext: ".js" });
@@ -184,3 +245,6 @@ function getPlatformAndArch() {
 // writeFileAsync("./async.txt", "Async save");
 // checkExists("./notes.txt");
 // getPlatformAndArch();
+// readFileInChunks("./big.txt");
+// copyFileUsingStreams("./source.txt", "./dest.txt");
+// compressFile("./data.txt", "./data.txt.gz");
