@@ -56,7 +56,7 @@ const server = http.createServer((req, res) => {
         }
 
         const newUser = {
-          id: new Date(),
+          id: Date.now(),
           name: data.name,
           email: data.email,
           age: data.age,
