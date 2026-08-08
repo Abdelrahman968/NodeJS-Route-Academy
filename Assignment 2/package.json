@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "type": "commonjs",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon app.js"
   }
 }

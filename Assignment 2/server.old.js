@@ -1,8 +1,9 @@
 const http = require("node:http");
 const fs = require("node:fs");
+const path = require("node:path");
 
 const PORT = 3000;
-const FILE = "users.json";
+const FILE = path.resolve("users.json");
 
 const server = http.createServer((req, res) => {
   try {
@@ -56,7 +57,7 @@ const server = http.createServer((req, res) => {
         }
 
         const newUser = {
-          id: Date.now(),
+          id: new Date(),
           name: data.name,
           email: data.email,
           age: data.age,
