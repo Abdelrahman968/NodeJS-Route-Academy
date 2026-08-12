@@ -1,0 +1,13 @@
+{
+  "name": "assignment-3",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon ."
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
